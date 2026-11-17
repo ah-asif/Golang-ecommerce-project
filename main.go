@@ -10,7 +10,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func aboutHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "I am AH Asif.")
+	fmt.Fprintln(w, "I am a Software Engineer.")
 }
 func main() {
 	mux := http.NewServeMux()
