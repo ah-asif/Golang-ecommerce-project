@@ -1,0 +1,27 @@
+# Environment variables
+.env
+.env.*
+
+# Go build files
+server
+*.exe
+*.out
+*.test
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/

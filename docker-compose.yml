@@ -1,0 +1,9 @@
+services:
+  go-api:
+    build: .
+    container_name: go-app
+
+    ports:
+      - "3000:3000"
+
+    restart: unless-stopped
