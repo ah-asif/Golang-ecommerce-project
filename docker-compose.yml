@@ -1,9 +1,18 @@
 services:
   go-api:
-    build: .
+    build:
+      context: ./backend
     container_name: go-app
-
     ports:
       - "3000:3000"
-
     restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+    container_name: client
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+    depends_on:
+      - go-api
