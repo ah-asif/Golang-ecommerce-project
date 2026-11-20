@@ -20,7 +20,7 @@ pipeline {
         stage('Go Test') {
             steps {
                 echo 'Running Go tests...'
-                sh 'go test ./...'
+                sh 'cd backend &&go test ./...'
             }
         }
 
