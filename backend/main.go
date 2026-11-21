@@ -25,15 +25,8 @@ type Product struct {
 var productList []Product
 
 func createProduct(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Content-Type", "application/json")
-
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
+	handleCors(w)
+	handlePreflight(w, r)
 
 	if r.Method != "POST" {
 		http.Error(w, "Please give me POST request", 400)
@@ -61,24 +54,41 @@ func createProduct(w http.ResponseWriter, r *http.Request) {
 
 	productList = append(productList, newProduct)
 
-	w.WriteHeader(201)
-	encoder := json.NewEncoder(w)
-	encoder.Encode(newProduct)
+	sendData(w, newProduct, 201)
 }
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Content-Type", "application/json")
+	handlePreflight(w, r)
+	handleCors(w)
 
 	if r.Method != "GET" {
 		http.Error(w, "Please give me GET request", 400)
 		return
 	}
 
-	encoder := json.NewEncoder(w)
-
-	encoder.Encode(productList)
+	sendData(w, productList, 200)
 }
+
+func sendData(w http.ResponseWriter, data interface{}, statusCode int) {
+	w.WriteHeader(statusCode)
+	encoder := json.NewEncoder(w)
+	encoder.Encode(data)
+}
+
+func handleCors(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Content-Type", "application/json")
+}
+
+func handlePreflight(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+}
+
 func main() {
 	mux := http.NewServeMux()
 
