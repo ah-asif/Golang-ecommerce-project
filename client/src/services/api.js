@@ -27,7 +27,7 @@ export const createProduct = async (productData) => {
       ...productData,
       price: parseFloat(productData.price), // Ensure price is a number
     };
-    const response = await api.post('/create-product', payload);
+    const response = await api.post('/products', payload);
     return response.data;
   } catch (error) {
     throw error;
