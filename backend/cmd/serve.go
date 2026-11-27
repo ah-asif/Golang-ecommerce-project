@@ -2,21 +2,23 @@ package cmd
 
 import (
 	"ecommerce/global_router"
-	"ecommerce/handlers"
+	"ecommerce/middleware"
 	"fmt"
 	"net/http"
 )
 
 func Serve() {
+	manager := middleware.NewManager()
+
+	manager.Use(middleware.Logger, middleware.LoggerHudai)
+
 	mux := http.NewServeMux()
 
-	mux.Handle("GET /products", http.HandlerFunc(handlers.GetProducts))
-	mux.Handle("POST /create-products", http.HandlerFunc(handlers.CreateProducts))
-	mux.Handle("GET /products/{productID}", http.HandlerFunc(handlers.GetProductByID))
-
-	fmt.Println("Backend server is running on: 3000")
+	initRoutes(mux, manager)
 
 	globalRouter := global_router.GlobalRouter(mux)
+
+	fmt.Println("Backend server is running on: 3000")
 
 	err := http.ListenAndServe(":3000", globalRouter)
 	if err != nil {
